@@ -5,8 +5,10 @@ import org.camunda.bpm.engine.ProcessEngines;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
+import org.camunda.bpm.engine.task.Task;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,5 +23,15 @@ public class CamundaProcessService {
                 .executeWithVariablesInReturn();
 
         return instance;
+    }
+
+    public List<Task> getActiveTasks(String processDefKey, String taskDefKey) {
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+        List<Task> tasks = processEngine.getTaskService().createTaskQuery()
+                .processDefinitionKey(processDefKey)
+                .taskDefinitionKey(taskDefKey)
+                .active().list();
+
+        return tasks;
     }
 }
