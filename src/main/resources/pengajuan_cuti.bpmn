@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0u0cjd2" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.6.0">
+  <bpmn:process id="pengajuan_cuti" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Start Pengajuan Cuti">
+      <bpmn:outgoing>SequenceFlow_1pofjgc</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1pofjgc" sourceRef="StartEvent_1" targetRef="approval_atasan" />
+    <bpmn:sequenceFlow id="SequenceFlow_0bpvpir" sourceRef="approval_atasan" targetRef="approval_hr" />
+    <bpmn:endEvent id="EndEvent_1j18t11" name="Finish">
+      <bpmn:incoming>SequenceFlow_1vjiu3f</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1vjiu3f" sourceRef="approval_hr" targetRef="EndEvent_1j18t11" />
+    <bpmn:userTask id="approval_atasan" name="Approval Atasan">
+      <bpmn:incoming>SequenceFlow_1pofjgc</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0bpvpir</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="approval_hr" name="Approval HR">
+      <bpmn:incoming>SequenceFlow_0bpvpir</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1vjiu3f</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="pengajuan_cuti">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="158" y="142" width="79" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1pofjgc_di" bpmnElement="SequenceFlow_1pofjgc">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="350" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0bpvpir_di" bpmnElement="SequenceFlow_0bpvpir">
+        <di:waypoint x="450" y="117" />
+        <di:waypoint x="510" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_1j18t11_di" bpmnElement="EndEvent_1j18t11">
+        <dc:Bounds x="732" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="735" y="142" width="30" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1vjiu3f_di" bpmnElement="SequenceFlow_1vjiu3f">
+        <di:waypoint x="610" y="117" />
+        <di:waypoint x="732" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1sfds0a_di" bpmnElement="approval_atasan">
+        <dc:Bounds x="350" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1gr6ddm_di" bpmnElement="approval_hr">
+        <dc:Bounds x="510" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
