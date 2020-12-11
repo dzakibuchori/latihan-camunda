@@ -3,16 +3,15 @@ package id.co.javan.workshop.latihancamunda.controller;
 import id.co.javan.workshop.latihancamunda.model.PengajuanCuti;
 import id.co.javan.workshop.latihancamunda.service.CamundaProcessService;
 import id.co.javan.workshop.latihancamunda.service.PengajuanCutiService;
-import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/pengajuan-cuti")
@@ -35,9 +34,9 @@ public class PengajuanCutiController {
     }
 
     @GetMapping("/approval-atasan")
-    public List<String> listApprovalAtasan() {
-        List<Task> tasks = camundaProcessService.getActiveTasks("pengajuan_cuti", "approval_atasan");
-        return tasks.stream().map(Task::getId).collect(Collectors.toList());
+    public Page<PengajuanCuti> listApprovalAtasan(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                  @RequestParam(value = "size", defaultValue = "10") int size) {
+        return pengajuanCutiService.listApproveAtasan(PageRequest.of(page, size));
     }
 
     @PostMapping("/approval-atasan/{taskId}")
