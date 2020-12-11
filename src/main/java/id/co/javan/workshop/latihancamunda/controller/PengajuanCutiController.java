@@ -1,7 +1,8 @@
 package id.co.javan.workshop.latihancamunda.controller;
 
+import id.co.javan.workshop.latihancamunda.model.PengajuanCuti;
 import id.co.javan.workshop.latihancamunda.service.CamundaProcessService;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
+import id.co.javan.workshop.latihancamunda.service.PengajuanCutiService;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,25 +18,35 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/pengajuan-cuti")
 public class PengajuanCutiController {
     private CamundaProcessService camundaProcessService;
+    private PengajuanCutiService pengajuanCutiService;
 
     @Autowired
-    public PengajuanCutiController(CamundaProcessService camundaProcessService) {
+    public PengajuanCutiController(CamundaProcessService camundaProcessService, PengajuanCutiService pengajuanCutiService) {
         this.camundaProcessService = camundaProcessService;
+        this.pengajuanCutiService = pengajuanCutiService;
     }
 
     @PostMapping
-    public String start(@RequestParam("nama") String nama,
+    public PengajuanCuti start(@RequestParam("nama") String nama,
                         @RequestParam("tanggal")
                         @DateTimeFormat(pattern = "dd-MM-yyyy") Date tanggal) {
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("tanggal", tanggal);
-        ProcessInstance pe = camundaProcessService.startProcess("pengajuan_cuti", nama, variables);
-        return pe.getBusinessKey();
+       PengajuanCuti cuti = pengajuanCutiService.start(nama, tanggal);
+       return cuti;
     }
 
     @GetMapping("/approval-atasan")
     public List<String> listApprovalAtasan() {
         List<Task> tasks = camundaProcessService.getActiveTasks("pengajuan_cuti", "approval_atasan");
-        return tasks.stream().map(Task::getProcessInstanceId).collect(Collectors.toList());
+        return tasks.stream().map(Task::getId).collect(Collectors.toList());
+    }
+
+    @PostMapping("/approval-atasan/{taskId}")
+    public String submitApprovalAtasan(@PathVariable("taskId") String taskId,
+                                       @RequestParam("approved") boolean approved) {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("approved", approved);
+        camundaProcessService.completeTask(taskId, variables);
+
+        return taskId;
     }
 }
