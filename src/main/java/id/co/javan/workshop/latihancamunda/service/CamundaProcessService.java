@@ -34,4 +34,13 @@ public class CamundaProcessService {
 
         return tasks;
     }
+
+    public void completeTask(String taskId, Map<String, Object> variable) {
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+        if(variable != null) {
+            processEngine.getTaskService().complete(taskId, variable);
+        } else {
+            processEngine.getTaskService().complete(taskId);
+        }
+    }
 }
