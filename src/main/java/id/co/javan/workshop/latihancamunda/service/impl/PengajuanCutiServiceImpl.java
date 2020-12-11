@@ -32,7 +32,7 @@ public class PengajuanCutiServiceImpl implements PengajuanCutiService {
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("tanggal", tanggal);
-        ProcessInstance pe = camundaProcessService.startProcess("pengajuan_cuti", nama, variables);
+        ProcessInstance pe = camundaProcessService.startProcess("pengajuan_cuti", String.valueOf(cuti.getId()), variables);
         cuti.setProcessInstanceId(pe.getProcessInstanceId());
 
         return pengajuanCutiRepository.save(cuti);
