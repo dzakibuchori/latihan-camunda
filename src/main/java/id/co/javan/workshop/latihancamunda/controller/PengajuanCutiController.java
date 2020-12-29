@@ -48,4 +48,14 @@ public class PengajuanCutiController {
 
         return taskId;
     }
+
+    @PostMapping("/approval-atasan/{id}/approve")
+    public PengajuanCuti approveAtasan(@PathVariable("id") Long id) {
+        return pengajuanCutiService.approveAtasan(id);
+    }
+
+    @PostMapping("/approval-atasan/{id}/reject")
+    public PengajuanCuti rejectAtasan(@PathVariable("id") Long id) {
+        return pengajuanCutiService.rejectAtasan(id);
+    }
 }
