@@ -51,4 +51,32 @@ public class PengajuanCutiServiceImpl implements PengajuanCutiService {
         List<String> processInstanceIds = tasks.stream().map(Task::getProcessInstanceId).collect(Collectors.toList());
         return pengajuanCutiRepository.findAllByProcessInstanceId(processInstanceIds, pageable);
     }
+
+    @Override
+    public PengajuanCuti approveAtasan(Long id) {
+        PengajuanCuti cuti = pengajuanCutiRepository.findById(id).get();
+        Task task = camundaProcessService.getTask(PROCESS_DEF_KEY, "approval_atasan", cuti.getProcessInstanceId());
+        if (task == null) {
+            throw new RuntimeException("posisi task tidak valid/task tidak ditemukan");
+        }
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("approve", true);
+        camundaProcessService.completeTask(task.getId(), variables);
+        return cuti;
+    }
+
+    @Override
+    public PengajuanCuti rejectAtasan(Long id) {
+        PengajuanCuti cuti = pengajuanCutiRepository.findById(id).get();
+        Task task = camundaProcessService.getTask(PROCESS_DEF_KEY, "approval_atasan", cuti.getProcessInstanceId());
+        if (task == null) {
+            throw new RuntimeException("posisi task tidak valid/task tidak ditemukan");
+        }
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("approve", false);
+        camundaProcessService.completeTask(task.getId(), variables);
+        return cuti;
+    }
 }

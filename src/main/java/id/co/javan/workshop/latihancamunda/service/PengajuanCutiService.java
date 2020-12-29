@@ -10,4 +10,8 @@ public interface PengajuanCutiService {
     PengajuanCuti start(String nama, Date tanggal);
 
     Page<PengajuanCuti> listApproveAtasan(Pageable pageable);
+
+    PengajuanCuti approveAtasan(Long id);
+
+    PengajuanCuti rejectAtasan(Long id);
 }
