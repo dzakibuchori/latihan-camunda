@@ -43,4 +43,11 @@ public class CamundaProcessService {
             processEngine.getTaskService().complete(taskId);
         }
     }
+
+    public Task getTask(String processDefKey, String taskDefKey, String processInstanceId) {
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+        Task task = processEngine.getTaskService().createTaskQuery().processDefinitionKey(processDefKey)
+                .taskDefinitionKey(taskDefKey).processInstanceId(processInstanceId).active().singleResult();
+        return task;
+    }
 }
